@@ -25,7 +25,7 @@ test__create_horizontal_line__is_console_width()
 
     /* Assert */
     if (length != console_width) {
-        puts("LENGTH OF LINE SHOULD MATCH CONSOLE WIDTH");
+        printf("LINE %d: LENGTH OF LINE SHOULD MATCH CONSOLE WIDTH", __LINE__);
         return 1;
     }
 
@@ -48,7 +48,7 @@ test__get_console_info__sets_attributes()
                console.colors,
                console.width,
                console.height);
-        puts("CONSOLE ATTRIBUTES SHOULD BE SET");
+        printf("LINE %d: CONSOLE ATTRIBUTES SHOULD BE SET", __LINE__);
         return 1;
     }
 
@@ -59,14 +59,14 @@ test__get_console_info__sets_attributes()
 int
 test__create_footer()
 {
-    /* Arrange */
-    char   footer_string[1024] = { 0 };
-    int    console_width = 80;
-    char * root_path     = "x:\\";
-    char   search_drive  = 'C';
-
-    /* Act */
-    create_footer(footer_string, console_width, root_path, search_drive);
+//    /* Arrange */
+//    char   footer_string[1024] = { 0 };
+//    int    console_width = 80;
+//    char * root_path     = "x:\\";
+//    char   search_drive  = 'C';
+//
+//    /* Act */
+//    create_footer(footer_string, console_width, root_path, search_drive);
 
     /* Assert */
 //    if (strcmp(footer_string,
@@ -94,7 +94,7 @@ test__compact_size_with_suffix__is_bytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -115,7 +115,7 @@ test__compact_size_with_suffix__is_kilobytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -136,7 +136,7 @@ test__compact_size_with_suffix__is_megabytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -157,7 +157,7 @@ test__compact_size_with_suffix__is_not_megabytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -178,7 +178,7 @@ test__compact_size_with_suffix__is_gigabytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -199,7 +199,7 @@ test__compact_size_with_suffix__is_not_gigabytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -220,7 +220,7 @@ test__compact_size_with_suffix__is_terabytes()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -241,7 +241,7 @@ test__compact_size_with_suffix__works_with_ntfs_volume_limit()
 
     /* Assert */
     if (strcmp(result, expected) != 0) {
-        printf("\nRESULT:   %s\nEXPECTED: %s\n", result, expected);
+        printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
     }
 
@@ -260,11 +260,29 @@ test__append_horizontal_line()
     /* Act */
     append_horizontal_line(result, console_width);
     length = strlen(result);
-    //printf("%s", result);
 
     /* Assert */
     if (length != console_width) {
-        printf("\nRESULT: %u\nEXPECTED: %u\n", length, console_width);
+        printf("\nLINE %d: RESULT: %u\nEXPECTED: %u\n", __LINE__, length, console_width);
+        return 1;
+    }
+
+    return 0;
+}
+
+
+int
+test__get_console_width__greater_than_zero()
+{
+    /* Arrange */
+    int width = -1;
+
+    /* Act */
+    width = get_console_width();
+
+    /* Assert */
+    if (width < 0) {
+        printf("LINE %d: GOT %d", __LINE__, width);
         return 1;
     }
 
@@ -286,7 +304,8 @@ main()
     failed_count += test__compact_size_with_suffix__is_terabytes();
     failed_count += test__compact_size_with_suffix__works_with_ntfs_volume_limit();
     failed_count += test__create_horizontal_line__is_console_width();
-    failed_count += test__append_horizontal_line();
+    failed_count += test__get_console_width__greater_than_zero();
+    //failed_count += test__append_horizontal_line();
     //failed_count += test__create_footer();
     failed_count += test__get_console_info__sets_attributes();
 

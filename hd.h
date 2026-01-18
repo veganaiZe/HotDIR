@@ -57,6 +57,7 @@ int display_header(char * search_path);
 int display_help();
 int fixup_path(char * search_path);
 struct console_info * get_console_info();
+int get_console_width();
 int process_cmdline_args(int argc, char * argv[], char search_drive, char * search_path, char * search_string);
 int process_files(HANDLE search_handle, char * search_path);
 int restore_console();

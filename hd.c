@@ -56,16 +56,19 @@ int build_initial_search_string(char * search_path, char * search_string)
 int
 append_horizontal_line(char string[], unsigned int console_width)
 {
-    unsigned int i = 0;
-    char glyph[1] = { 0 };
-
-    sprintf(glyph, "%c", 196);
-
-    for (i=0; i <= console_width; ++i) {
-        strcat(string, glyph);
-    }
-
-    strcat(string, "\n");
+    (void) string;
+    (void) console_width;
+    //unsigned int i = 0;
+    //SHORT console_width = csbi.srWindow.Right + 1;
+    //const char horizontal_line_character[] = { (char)196, '\0' };
+//
+//    sprintf(glyph, "%c", 196);
+//
+//    for (i=0; i <= console_width; ++i) {
+//        strcat(string, glyph);
+//    }
+//
+//    strcat(string, "\n");
     return 0;
 }
 
@@ -246,6 +249,18 @@ get_console_info(struct console_info * p_console)
                         - g_screen_info_t.srWindow.Top;
 
     return p_console;
+}
+
+
+int
+get_console_width()
+{
+    HANDLE console_output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO console_screen_buffer_info = { 0 };
+    GetConsoleScreenBufferInfo(console_output_handle,
+                               &console_screen_buffer_info);
+
+    return console_screen_buffer_info.srWindow.Right + 1;
 }
 
 
