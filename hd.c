@@ -53,6 +53,23 @@ int build_initial_search_string(char * search_path, char * search_string)
 }
 
 
+int
+append_horizontal_line(char string[], unsigned int console_width)
+{
+    unsigned int i = 0;
+    char glyph[1] = { 0 };
+
+    sprintf(glyph, "%c", 196);
+
+    for (i=0; i <= console_width; ++i) {
+        strcat(string, glyph);
+    }
+
+    strcat(string, "\n");
+    return 0;
+}
+
+
 char *
 create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
 {
@@ -90,7 +107,8 @@ compact_size_with_suffix(long long size_bytes, char * suffixed_size)
 }
 
 
-int display_footer()
+int
+display_footer()
 {
     char line[8192] = { 0 };
 
@@ -127,6 +145,20 @@ int display_footer()
     GetVolumeInformation(g_root_path, g_volume_name, ARRAYSIZE(g_volume_name), NULL, NULL, NULL, NULL, 0);
 
     FG_LIGHT_RED(); printf("%s\n", g_volume_name);
+    return 0;
+}
+
+
+int
+create_footer(char * footer_string, int console_width, char * root_path, char search_drive)
+{
+    (void) footer_string;
+    (void) console_width;
+    (void) root_path;
+    (void) search_drive;
+
+
+
     return 0;
 }
 

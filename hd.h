@@ -36,6 +36,9 @@
 #define FG_LIGHT_YELLOW() SetConsoleTextAttribute(g_hConsole, 0x0E)
 #define FG_BRIGHT_WHITE() SetConsoleTextAttribute(g_hConsole, 0x0F)
 
+#define AQUA_FG "\033[96;40m"
+#define RESET_COLORS "\033[0m"
+
 
 struct console_info {
         int colors;
@@ -44,8 +47,9 @@ struct console_info {
 };
 
 
+int append_horizontal_line(char[], unsigned int);
 int build_initial_search_string(char * search_path, char * search_string);
-//create_footer(char *footer_string, short console_width, char *root_path, char search_drive);
+int create_footer(char *, int, char *, char);
 char * create_horizontal_line(char *, CONSOLE_SCREEN_BUFFER_INFO);
 char * compact_size_with_suffix(long long, char *);
 int display_footer();

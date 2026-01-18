@@ -56,19 +56,19 @@ test__get_console_info__sets_attributes()
 }
 
 
-//int
-//test__create_footer()
-//{
-//    /* Arrange */
-//    char footer_string[640];
-//    short console_width = 80;
-//    char root_path[] = "x:\\";
-//    char search_drive = 'C';
-//
-//    /* Act */
-//    create_footer(footer_string, console_width, root_path, search_drive);
-//
-//    /* Assert */
+int
+test__create_footer()
+{
+    /* Arrange */
+    char   footer_string[1024] = { 0 };
+    int    console_width = 80;
+    char * root_path     = "x:\\";
+    char   search_drive  = 'C';
+
+    /* Act */
+    create_footer(footer_string, console_width, root_path, search_drive);
+
+    /* Assert */
 //    if (strcmp(footer_string,
 //            "     0 files, totaling , consuming 0 bytes of disk space.\n"
 //            " 0 bytes available on Drive C:           Volume label: C_DRIVE\n"
@@ -77,8 +77,8 @@ test__get_console_info__sets_attributes()
 //        return 1;
 //    }
 //
-//    return 0;
-//}
+    return 0;
+}
 
 
 int
@@ -250,6 +250,29 @@ test__compact_size_with_suffix__works_with_ntfs_volume_limit()
 
 
 int
+test__append_horizontal_line()
+{
+    /* Arrange */
+    char result[4096] = { 0 };
+    unsigned int length = 0;
+    unsigned int console_width = 80;
+
+    /* Act */
+    append_horizontal_line(result, console_width);
+    length = strlen(result);
+    //printf("%s", result);
+
+    /* Assert */
+    if (length != console_width) {
+        printf("\nRESULT: %u\nEXPECTED: %u\n", length, console_width);
+        return 1;
+    }
+
+    return 0;
+}
+
+
+int
 main()
 {
     int failed_count = 0;
@@ -263,6 +286,7 @@ main()
     failed_count += test__compact_size_with_suffix__is_terabytes();
     failed_count += test__compact_size_with_suffix__works_with_ntfs_volume_limit();
     failed_count += test__create_horizontal_line__is_console_width();
+    failed_count += test__append_horizontal_line();
     //failed_count += test__create_footer();
     failed_count += test__get_console_info__sets_attributes();
 
