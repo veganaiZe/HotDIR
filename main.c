@@ -16,7 +16,7 @@ int main(int argc, char * argv[])
     build_initial_search_string(search_path, search_string);
     process_cmdline_args(argc,
                          argv,
-                         'C',  /* search_drive */
+                         'C',  /** search_drive */
                          search_path,
                          search_string);
     display_header(search_path);

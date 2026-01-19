@@ -49,17 +49,17 @@ struct console_info {
 
 int append_horizontal_line(char[], unsigned int);
 int build_initial_search_string(char * search_path, char * search_string);
-char * compact_size_with_suffix(long long, char *);
+char * compact_size_with_suffix(unsigned long, char *);
 int create_footer(char *, int, char *, char);
 char * create_horizontal_line(char *, CONSOLE_SCREEN_BUFFER_INFO);
-int display_footer();
+int display_footer(void);
 int display_header(char * search_path);
-int display_help();
+int display_help(void);
 int fixup_path(char * search_path);
-struct console_info * get_console_info();
-int get_console_width();
+struct console_info * get_console_info(void);
+int get_console_width(void);
 int process_cmdline_args(int argc, char * argv[], char search_drive, char * search_path, char * search_string);
 int process_files(HANDLE search_handle, char * search_path);
-int restore_console();
+int restore_console(void);
 
-#endif  /* HD_H */
+#endif  /** HD_H */

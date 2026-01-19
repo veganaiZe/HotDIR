@@ -7,16 +7,16 @@
 int
 test__append_horizontal_line()
 {
-    /* Arrange */
+    /** Arrange */
     char result[4096] = { 0 };
     unsigned int length = 0;
     unsigned int console_width = 80;
 
-    /* Act */
+    /** Act */
     append_horizontal_line(result, console_width);
     length = strlen(result);
 
-    /* Assert */
+    /** Assert */
     if (length != console_width) {
         printf("\nLINE %d: RESULT: %u\nEXPECTED: %u\n", __LINE__, length, console_width);
         return 1;
@@ -29,15 +29,15 @@ test__append_horizontal_line()
 int
 test__compact_size_with_suffix__is_bytes()
 {
-    /* Arrange */
+    /** Arrange */
     int size = 1023;
     char result[16] = { 0 };
     const char * expected = "1023 B";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -50,15 +50,15 @@ test__compact_size_with_suffix__is_bytes()
 int
 test__compact_size_with_suffix__is_gigabytes()
 {
-    /* Arrange */
-    long long size = 1073741824;
+    /** Arrange */
+    unsigned long size = 1073741824;
     char result[16] = { 0 };
     const char * expected = "1 GB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -71,15 +71,15 @@ test__compact_size_with_suffix__is_gigabytes()
 int
 test__compact_size_with_suffix__is_kilobytes()
 {
-    /* Arrange */
+    /** Arrange */
     int size = 1048575;
     char result[16] = { 0 };
     const char * expected = "1023 KB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -92,15 +92,15 @@ test__compact_size_with_suffix__is_kilobytes()
 int
 test__compact_size_with_suffix__is_megabytes()
 {
-    /* Arrange */
+    /** Arrange */
     int size = 1048576;
     char result[16] = { 0 };
     const char * expected = "1 MB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -113,15 +113,15 @@ test__compact_size_with_suffix__is_megabytes()
 int
 test__compact_size_with_suffix__is_not_gigabytes()
 {
-    /* Arrange */
+    /** Arrange */
     long long size = 1073741823;
     char result[16] = { 0 };
     const char * expected = "1023 MB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -134,15 +134,15 @@ test__compact_size_with_suffix__is_not_gigabytes()
 int
 test__compact_size_with_suffix__is_not_megabytes()
 {
-    /* Arrange */
+    /** Arrange */
     int size = 1048575;
     char result[16] = { 0 };
     const char * expected = "1023 KB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -155,15 +155,15 @@ test__compact_size_with_suffix__is_not_megabytes()
 int
 test__compact_size_with_suffix__is_terabytes()
 {
-    /* Arrange */
+    /** Arrange */
     long long size = 1099511627776;
     char result[16] = { 0 };
     const char * expected = "1 TB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -176,15 +176,15 @@ test__compact_size_with_suffix__is_terabytes()
 int
 test__compact_size_with_suffix__works_with_ntfs_volume_limit()
 {
-    /* Arrange */
+    /** Arrange */
     long long size = 281474976710656;
     char result[16] = { 0 };
     const char * expected = "256 TB";
 
-    /* Act */
+    /** Act */
     compact_size_with_suffix(size, result);
 
-    /* Assert */
+    /** Assert */
     if (strcmp(result, expected) != 0) {
         printf("\nLINE %d: RESULT:   %s\nEXPECTED: %s\n", __LINE__, result, expected);
         return 1;
@@ -197,16 +197,16 @@ test__compact_size_with_suffix__works_with_ntfs_volume_limit()
 int
 test__create_footer()
 {
-//    /* Arrange */
+//    /** Arrange */
 //    char   footer_string[1024] = { 0 };
 //    int    console_width = 80;
 //    char * root_path     = "x:\\";
 //    char   search_drive  = 'C';
 //
-//    /* Act */
+//    /** Act */
 //    create_footer(footer_string, console_width, root_path, search_drive);
 
-    /* Assert */
+    /** Assert */
 //    if (strcmp(footer_string,
 //            "     0 files, totaling , consuming 0 bytes of disk space.\n"
 //            " 0 bytes available on Drive C:           Volume label: C_DRIVE\n"
@@ -222,23 +222,23 @@ test__create_footer()
 int
 test__create_horizontal_line__is_console_width()
 {
-    /* Arrange */
+    /** Arrange */
     CONSOLE_SCREEN_BUFFER_INFO csbi = {
-            80, 40,        /* buffer columns, rows */
-            0, 0,          /* cursor column, row */
-            14,            /* color attributes */
-            0, 0, 79, 39,  /* coords left, top, right, bottom */
-            0, 0           /* max window size */
+            80, 40,        /** buffer columns, rows */
+            0, 0,          /** cursor column, row */
+            14,            /** color attributes */
+            0, 0, 79, 39,  /** coords left, top, right, bottom */
+            0, 0           /** max window size */
     };
     size_t console_width = (size_t) csbi.srWindow.Right + 1;
     char line[8192] = { 0 };
     size_t length = 0;
 
-    /* Act */
+    /** Act */
     create_horizontal_line(line, csbi);
     length = strlen(line);
 
-    /* Assert */
+    /** Assert */
     if (length != console_width) {
         printf("LINE %d: LENGTH OF LINE SHOULD MATCH CONSOLE WIDTH", __LINE__);
         return 1;
@@ -251,13 +251,13 @@ test__create_horizontal_line__is_console_width()
 int
 test__get_console_info__sets_attributes()
 {
-    /* Arrange */
+    /** Arrange */
     struct console_info console = { -1, -1, -1 };
 
-    /* Act */
+    /** Act */
     get_console_info(&console);
 
-    /* Assert */
+    /** Assert */
     if (console.colors < 0 || console.width < 1 || console.height < 0) {
         printf("RESULT: %d, %d, %d\n",
                console.colors,
@@ -274,13 +274,13 @@ test__get_console_info__sets_attributes()
 int
 test__get_console_width__greater_than_zero()
 {
-    /* Arrange */
+    /** Arrange */
     int width = -1;
 
-    /* Act */
+    /** Act */
     width = get_console_width();
 
-    /* Assert */
+    /** Assert */
     if (width < 0) {
         printf("LINE %d: GOT %d", __LINE__, width);
         return 1;

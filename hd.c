@@ -1,4 +1,4 @@
-/* HotDIR (clone) - Public Domain by veganaiZe
+/** HotDIR (clone) - Public Domain by veganaiZe
  *
  * Colorful file/folder listing at the command prompt.
  *
@@ -12,34 +12,34 @@
 
 #include "hd.h"
 
-#define VERSION_STRING "0.6.4 (pre-release)"  /* <-- Increment just before release. */
+#define VERSION_STRING "0.6.4 (pre-release)"  /** <-- Increment just before release. */
 
 
 HANDLE g_hConsole;
 SHORT  g_console_width;
 WORD   g_original_attributes;
-char   g_search_drive   = 'C';     /* Pre-load with C: drive */
+char   g_search_drive   = 'C';     /** Pre-load with C: drive */
 //char   g_search_string[MAX_PATH];
 //char   g_search_path[MAX_PATH];
 
-/* Console variables: */
+/** Console variables: */
 CONSOLE_SCREEN_BUFFER_INFO
        g_screen_info_t;
 WIN32_FIND_DATA
        g_file_data_t;
 INT    g_console_height = 24;
 //HANDLE g_search_handle;
-SHORT  g_line_count = 3;  /* Preload w/ num lines in header */
+SHORT  g_line_count = 3;  /** Preload w/ num lines in header */
 DWORD  g_dwAttrib;
 
-/* File variables */
-char * g_file_ext       = NULL;    /* Current file's extension */
-double  g_file_size      = -1.0;    /* Current file's size */
-double  g_total_size     = 0.0;     /* Total of all listed file sizes */
-double  g_total_consumed = 0.0;     /* Total actual/compressed disk usage */
-int    g_file_counter   = 0;       /* Total listed file count */
+/** File variables */
+char * g_file_ext       = NULL;    /** Current file's extension */
+double  g_file_size      = -1.0;    /** Current file's size */
+double  g_total_size     = 0.0;     /** Total of all listed file sizes */
+double  g_total_consumed = 0.0;     /** Total actual/compressed disk usage */
+int    g_file_counter   = 0;       /** Total listed file count */
 
-/* Args to GetVolumeInformation() */
+/** Args to GetVolumeInformation() */
 TCHAR  g_volume_name[MAX_PATH + 1] = { 0 };
 char * g_root_path = "x:\\";
 
@@ -80,7 +80,7 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
     SHORT console_width = csbi.srWindow.Right + 1;
     const char horizontal_line_character[] = { (char)196, '\0' };
 
-    /* Draw line in result string */
+    /** Draw line in result string */
     for(i = 0; i < console_width; ++i) {
         //if (i == console_width / 2) {
         //    strcat(string, "%c", );
@@ -96,10 +96,10 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
 char *
 compact_size_with_suffix(long long size_bytes, char * suffixed_size)
 {
-    if(size_bytes >= 1024LL)  /* KB */
-        if((size_bytes /= 1024LL) >= 1024LL)  /* MB */
-            if((size_bytes /= 1024LL) >= 1024LL)  /* GB */
-                if((size_bytes /= 1024LL) >= 1024LL)  /* TB */
+    if(size_bytes >= 1024LL)  /** KB */
+        if((size_bytes /= 1024LL) >= 1024LL)  /** MB */
+            if((size_bytes /= 1024LL) >= 1024LL)  /** GB */
+                if((size_bytes /= 1024LL) >= 1024LL)  /** TB */
                     sprintf(suffixed_size, "%lld TB", size_bytes/1024LL);
                 else sprintf(suffixed_size, "%lld GB", size_bytes);
             else sprintf(suffixed_size, "%lld MB", size_bytes);
@@ -125,10 +125,10 @@ display_footer()
     printf(" files, totaling ");
     FG_LIGHT_AQUA();
 
-    if(g_total_size > 1023)  /* KB */
-        if((g_total_size /= 1024.0) > 1023)  /* MB */
-            if((g_total_size /= 1024.0) > 1023)  /* GB */
-                if((g_total_size /= 1024.0) > 1023)  /* TB */
+    if(g_total_size > 1023)  /** KB */
+        if((g_total_size /= 1024.0) > 1023)  /** MB */
+            if((g_total_size /= 1024.0) > 1023)  /** GB */
+                if((g_total_size /= 1024.0) > 1023)  /** TB */
                     printf("%.1f TB", g_total_size);
                 else printf("%.1f GB", g_total_size);
             else printf("%.1f MB", g_total_size);
@@ -190,7 +190,7 @@ int display_help()
     FG_BRIGHT_WHITE(); puts("\nHD " VERSION_STRING);
     FG_AQUA(); puts("Public domain by veganaiZe");
 
-    /* Draw ------------- */
+    /** Draw ------------- */
     for (i = 0; i < g_console_width; i++) putchar(196);
 
     FG_PURPLE(); printf("\nClone of ");
@@ -218,13 +218,13 @@ int display_help()
 
 int fixup_path(char * search_path)
 {
-    /* Contents of directory (w/o trailing backslash) */
+    /** Contents of directory (w/o trailing backslash) */
     g_dwAttrib = GetFileAttributes((LPCTSTR) search_path);
 
-    /* Valid directory ? */
+    /** Valid directory ? */
     if (g_dwAttrib != INVALID_FILE_ATTRIBUTES
             && (g_dwAttrib & FILE_ATTRIBUTE_DIRECTORY)) {
-        /* Append backslash & wildcard pattern */
+        /** Append backslash & wildcard pattern */
         strcat(search_path, "\\*.*");
     }
 
@@ -239,12 +239,12 @@ get_console_info(struct console_info * p_console)
     g_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     GetConsoleScreenBufferInfo(hConsole, &g_screen_info_t);
 
-    g_original_attributes = g_screen_info_t.wAttributes; /* Save console colors */
+    g_original_attributes = g_screen_info_t.wAttributes; /** Save console colors */
     p_console->colors = g_screen_info_t.wAttributes;
-    g_console_width = g_screen_info_t.srWindow.Right;    /* Get console width */
+    g_console_width = g_screen_info_t.srWindow.Right;    /** Get console width */
     p_console->width = g_screen_info_t.srWindow.Right + 1;
     g_console_height = g_screen_info_t.srWindow.Bottom
-                     - g_screen_info_t.srWindow.Top;  /* Get console height */
+                     - g_screen_info_t.srWindow.Top;  /** Get console height */
     p_console->height = g_screen_info_t.srWindow.Bottom
                         - g_screen_info_t.srWindow.Top;
 
@@ -275,58 +275,58 @@ int process_cmdline_args(int argc,
         if (*(argv[argc]) == '/') {
             switch ((int)*(argv[argc]+1)) {
 
-                /* CHOICE: Display Help `/h` */
+                /** CHOICE: Display Help `/h` */
                 case 'h' : case 'H' : case '?':
                     display_help();
                     restore_console();
-                    /* Quit */
+                    /** Quit */
                     return 0;
 
-                /* CHOICE: Clear Screen `/c` */
+                /** CHOICE: Clear Screen `/c` */
                 case 'c' : case 'C' :
                     system("cls");
                     break;
 
-                /* CHOICE: Sort Name `/n` */
+                /** CHOICE: Sort Name `/n` */
                 case 'n' : case 'N' :
                     puts("\nSORT_NAME -- not implemented (default)");
                     break;
 
-                /* CHOICE: Sort Extension `/e` */
+                /** CHOICE: Sort Extension `/e` */
                 case 'e' : case 'E' :
                     puts("\nSORT_EXT -- not implemented");
                     break;
 
-                /* CHOICE: Sort Date `/d` */
+                /** CHOICE: Sort Date `/d` */
                 case 'd' : case 'D' :
                     puts("\nSORT_DATE -- not implemented");
                     break;
 
-                /* CHOICE: Sort Size `/s` */
+                /** CHOICE: Sort Size `/s` */
                 case 's' : case 'S' :
                     puts("\nSORT_SIZE -- not implemented");
                     break;
-            }  /* End switch */
+            }  /** End switch */
         /** Process any drive, folder, and file arguments */
         } else {
-            /* Drive indicator ? */
+            /** Drive indicator ? */
             if (strchr(argv[argc], ':') != NULL) {
 
-               /* Get current drive letter */
+               /** Get current drive letter */
                search_drive = (char)toupper(*(strchr(argv[argc], ':')-1));
 
-               /* Drop drive letter */
+               /** Drop drive letter */
                argv[argc] = argv[argc]+2;
 
             } else {
-               /* Fallback to current drive letter */
+               /** Fallback to current drive letter */
                search_drive = *search_string;
             }
 
-            /* Drop drive letter no matter what */
+            /** Drop drive letter no matter what */
             strcpy(search_string, search_string+2);
 
-            /* Arg has more than just drive letter ? */
+            /** Arg has more than just drive letter ? */
             if (argv[argc][0]) {
 
                 if (argv[argc][0] != '\\')
@@ -347,9 +347,9 @@ int process_cmdline_args(int argc,
                 strcat(search_path, "*.*")
                 ;
 
-        }  /* End if */
+        }  /** End if */
 
-    }  /* End while */
+    }  /** End while */
 
     return 0;
 }
@@ -376,22 +376,22 @@ int process_files(HANDLE search_handle, char * search_path)
 //    }
 
     do {
-        /* File is directory ? */
+        /** File is directory ? */
         if (g_file_data_t.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             FG_LIGHT_PURPLE();
         } else {
             g_file_counter++;
 
-            /* Get file extension */
+            /** Get file extension */
             g_file_ext = strrchr(g_file_data_t.cFileName, '.');
 
-            /* Convert file extension to lowercase */
+            /** Convert file extension to lowercase */
             if (g_file_ext != NULL) {
                 for (i = 0; g_file_ext[i]; i++) {
                     g_file_ext[i] = (char)tolower(g_file_ext[i]);
                 }
 
-                /* Set color based on file extension */
+                /** Set color based on file extension */
                 if (strcmp(g_file_ext, ".exe") == 0 || strcmp(g_file_ext, ".msi") == 0 )
                     FG_LIGHT_AQUA();
                 else if(strcmp(g_file_ext, ".txt") == 0 || strcmp(g_file_ext, ".doc") == 0 || strcmp(g_file_ext, ".c") == 0
@@ -494,9 +494,9 @@ int process_files(HANDLE search_handle, char * search_path)
                     FG_YELLOW();
                 else FG_GRAY();  // (everything else)
             } else FG_GRAY();  // (no extension)
-        } /* First if/else */
+        } /** First if/else */
 
-        /* Pause if console screen is full */
+        /** Pause if console screen is full */
         if(++g_line_count == g_console_height) {
             g_line_count = 0;
             GetConsoleScreenBufferInfo(g_hConsole, &g_screen_info_t);
@@ -505,30 +505,30 @@ int process_files(HANDLE search_handle, char * search_path)
             SetConsoleTextAttribute(g_hConsole, (WORD)g_dwAttrib); // Restore Color
         }
 
-        /* "DARK FG_RED" for hidden files */
+        /** "DARK FG_RED" for hidden files */
         if(g_file_data_t.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN) {
             FG_RED();
         }
 
-        /* Display file name */
+        /** Display file name */
         printf("%-*s", g_console_width / 2 - 8, g_file_data_t.cFileName);
         //printf("%s\n", g_file_ext);
 
-        /* Display <dir> for directories */
+        /** Display <dir> for directories */
         if(g_file_data_t.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             printf("  <dir> ");
 
-        /* Otherwise display file size */
+        /** Otherwise display file size */
         } else {
             g_file_size = (double)((g_file_data_t.nFileSizeHigh * (MAXDWORD+1))
                                     + g_file_data_t.nFileSizeLow);
             g_total_size += g_file_size;
             FG_GRAY();
 
-            if(g_file_size > 1023)  /* KB */
-                if((g_file_size /= 1024.0) > 1023)  /* MB */
-                    if((g_file_size /= 1024.0) > 1023)  /* BB */
-                        if((g_file_size /= 1024.0) > 1023)  /* TB */
+            if(g_file_size > 1023)  /** KB */
+                if((g_file_size /= 1024.0) > 1023)  /** MB */
+                    if((g_file_size /= 1024.0) > 1023)  /** BB */
+                        if((g_file_size /= 1024.0) > 1023)  /** TB */
                             printf("% 5.1f TB", g_file_size);
                         else printf("% 5.1f GB", g_file_size);
                     else printf("% 5.1f MB", g_file_size);
@@ -540,7 +540,7 @@ int process_files(HANDLE search_handle, char * search_path)
 
         FG_AQUA(); printf("\263 \n");  // Print |
     } while( FindNextFile(search_handle, &g_file_data_t) != 0 );
-    /* End do */
+    /** End do */
 
     FindClose(search_handle);
     return 0;
