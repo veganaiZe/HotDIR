@@ -49,9 +49,9 @@ struct console_info {
 
 int append_horizontal_line(char[], unsigned int);
 int build_initial_search_string(char * search_path, char * search_string);
+char * compact_size_with_suffix(long long, char *);
 int create_footer(char *, int, char *, char);
 char * create_horizontal_line(char *, CONSOLE_SCREEN_BUFFER_INFO);
-char * compact_size_with_suffix(long long, char *);
 int display_footer();
 int display_header(char * search_path);
 int display_help();
