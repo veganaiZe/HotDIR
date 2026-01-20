@@ -521,7 +521,7 @@ int process_files(HANDLE search_handle, char * search_path)
 
         /** Otherwise display file size */
         } else {
-            g_file_size = (double)((g_file_data_t.nFileSizeHigh * (MAXDWORD+1))
+            g_file_size = (double) (g_file_data_t.nFileSizeHigh * MAXDWORD
                                     + g_file_data_t.nFileSizeLow);
             g_total_size += g_file_size;
             FG_GRAY();
