@@ -44,15 +44,6 @@ TCHAR  g_volume_name[MAX_PATH + 1] = { 0 };
 char * g_root_path = "x:\\";
 
 
-int build_initial_search_string(char * search_path, char * search_string)
-{
-    GetCurrentDirectory(MAX_PATH, search_string);
-    strcpy(search_path, search_string);
-    strcat(search_path, "\\*.*");
-    return 0;
-}
-
-
 int
 append_horizontal_line(char string[], unsigned int console_width)
 {
@@ -69,6 +60,47 @@ append_horizontal_line(char string[], unsigned int console_width)
 //    }
 //
 //    strcat(string, "\n");*/
+    return 0;
+}
+
+
+int
+build_initial_search_string(char * search_path, char * search_string)
+{
+    GetCurrentDirectory(MAX_PATH, search_string);
+    strcpy(search_path, search_string);
+    strcat(search_path, "\\*.*");
+    return 0;
+}
+
+
+char *
+compact_size_with_suffix(double size_bytes, char * suffixed_size)
+{
+    if(size_bytes >= 1024)  /** KB */
+        if((size_bytes /= 1024) >= 1024)  /** MB */
+            if((size_bytes /= 1024) >= 1024)  /** GB */
+                if((size_bytes /= 1024) >= 1024)  /** TB */
+                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024));
+                else sprintf(suffixed_size, "%u GB", (unsigned) size_bytes);
+            else sprintf(suffixed_size, "%u MB", (unsigned) size_bytes);
+        else sprintf(suffixed_size, "%u KB", (unsigned) size_bytes);
+    else sprintf(suffixed_size, "%u B", (unsigned) size_bytes);
+
+    return suffixed_size;
+}
+
+
+int
+create_footer(char * footer_string, int console_width, char * root_path, char search_drive)
+{
+    (void) footer_string;
+    (void) console_width;
+    (void) root_path;
+    (void) search_drive;
+
+
+
     return 0;
 }
 
@@ -90,23 +122,6 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
     }
 
     return result;
-}
-
-
-char *
-compact_size_with_suffix(double size_bytes, char * suffixed_size)
-{
-    if(size_bytes >= 1024)  /** KB */
-        if((size_bytes /= 1024) >= 1024)  /** MB */
-            if((size_bytes /= 1024) >= 1024)  /** GB */
-                if((size_bytes /= 1024) >= 1024)  /** TB */
-                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024));
-                else sprintf(suffixed_size, "%u GB", (unsigned) size_bytes);
-            else sprintf(suffixed_size, "%u MB", (unsigned) size_bytes);
-        else sprintf(suffixed_size, "%u KB", (unsigned) size_bytes);
-    else sprintf(suffixed_size, "%u B", (unsigned) size_bytes);
-
-    return suffixed_size;
 }
 
 
@@ -153,20 +168,7 @@ display_footer(void)
 
 
 int
-create_footer(char * footer_string, int console_width, char * root_path, char search_drive)
-{
-    (void) footer_string;
-    (void) console_width;
-    (void) root_path;
-    (void) search_drive;
-
-
-
-    return 0;
-}
-
-
-int display_header(char * search_path)
+display_header(char * search_path)
 {
     char line[8192] = { 0 };
 
@@ -183,7 +185,8 @@ int display_header(char * search_path)
 }
 
 
-int display_help(void)
+int
+display_help(void)
 {
     int i;
 
@@ -216,7 +219,8 @@ int display_help(void)
 }
 
 
-int fixup_path(char * search_path)
+int
+fixup_path(char * search_path)
 {
     /** Contents of directory (w/o trailing backslash) */
     g_dwAttrib = GetFileAttributes((LPCTSTR) search_path);
@@ -264,11 +268,13 @@ get_console_width(void)
 }
 
 
-int process_cmdline_args(int argc,
-                         char *argv[],
-                         char search_drive,
-                         char *search_path,
-                         char *search_string)
+int
+process_cmdline_args(
+        int argc,
+        char *argv[],
+        char search_drive,
+        char *search_path,
+        char *search_string)
 {
     /** Process command line arguments */
     while (argc-- > 1) {
@@ -355,7 +361,8 @@ int process_cmdline_args(int argc,
 }
 
 
-int process_files(HANDLE search_handle, char * search_path)
+int
+process_files(HANDLE search_handle, char * search_path)
 {
     int i;
 
@@ -548,7 +555,8 @@ int process_files(HANDLE search_handle, char * search_path)
 }
 
 
-int restore_console(void)
+int
+restore_console(void)
 {
     SetConsoleTextAttribute(g_hConsole, g_original_attributes);
     return 0;
