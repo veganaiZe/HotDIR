@@ -5,7 +5,7 @@
 
 
 int
-test__append_horizontal_line()
+test__append_horizontal_line(void)
 {
     /** Arrange */
     char result[4096] = { 0 };
@@ -27,7 +27,7 @@ test__append_horizontal_line()
 
 
 int
-test__compact_size_with_suffix__is_bytes()
+test__compact_size_with_suffix__is_bytes(void)
 {
     /** Arrange */
     int size = 1023;
@@ -48,7 +48,7 @@ test__compact_size_with_suffix__is_bytes()
 
 
 int
-test__compact_size_with_suffix__is_gigabytes()
+test__compact_size_with_suffix__is_gigabytes(void)
 {
     /** Arrange */
     unsigned long size = 1073741824;
@@ -69,7 +69,7 @@ test__compact_size_with_suffix__is_gigabytes()
 
 
 int
-test__compact_size_with_suffix__is_kilobytes()
+test__compact_size_with_suffix__is_kilobytes(void)
 {
     /** Arrange */
     int size = 1048575;
@@ -90,7 +90,7 @@ test__compact_size_with_suffix__is_kilobytes()
 
 
 int
-test__compact_size_with_suffix__is_megabytes()
+test__compact_size_with_suffix__is_megabytes(void)
 {
     /** Arrange */
     int size = 1048576;
@@ -111,7 +111,7 @@ test__compact_size_with_suffix__is_megabytes()
 
 
 int
-test__compact_size_with_suffix__is_not_gigabytes()
+test__compact_size_with_suffix__is_not_gigabytes(void)
 {
     /** Arrange */
     unsigned long size = 1073741823;
@@ -132,7 +132,7 @@ test__compact_size_with_suffix__is_not_gigabytes()
 
 
 int
-test__compact_size_with_suffix__is_not_megabytes()
+test__compact_size_with_suffix__is_not_megabytes(void)
 {
     /** Arrange */
     int size = 1048575;
@@ -153,10 +153,10 @@ test__compact_size_with_suffix__is_not_megabytes()
 
 
 int
-test__compact_size_with_suffix__is_terabytes()
+test__compact_size_with_suffix__is_terabytes(void)
 {
     /** Arrange */
-    double size = 1099511627776;
+    double size = 1099511627776.0;
     char result[16] = { 0 };
     const char * expected = "1 TB";
 
@@ -174,10 +174,10 @@ test__compact_size_with_suffix__is_terabytes()
 
 
 int
-test__compact_size_with_suffix__works_with_ntfs_volume_limit()
+test__compact_size_with_suffix__works_with_ntfs_volume_limit(void)
 {
     /** Arrange */
-    double size = 281474976710656;
+    double size = 281474976710656.0;
     char result[16] = { 0 };
     const char * expected = "256 TB";
 
@@ -195,32 +195,32 @@ test__compact_size_with_suffix__works_with_ntfs_volume_limit()
 
 
 int
-test__create_footer()
+test__create_footer(void)
 {
-//    /** Arrange */
-//    char   footer_string[1024] = { 0 };
+    /** Arrange */
+/*//    char   footer_string[1024] = { 0 };
 //    int    console_width = 80;
 //    char * root_path     = "x:\\";
 //    char   search_drive  = 'C';
-//
-//    /** Act */
-//    create_footer(footer_string, console_width, root_path, search_drive);
+//*/
+    /** Act */
+/*//    create_footer(footer_string, console_width, root_path, search_drive);*/
 
     /** Assert */
-//    if (strcmp(footer_string,
+/*//    if (strcmp(footer_string,
 //            "     0 files, totaling , consuming 0 bytes of disk space.\n"
 //            " 0 bytes available on Drive C:           Volume label: C_DRIVE\n"
 //            ) != 0) {
 //        puts("STRING SHOULD MATCH");
 //        return 1;
 //    }
-//
+//*/
     return 0;
 }
 
 
 int
-test__create_horizontal_line__is_console_width()
+test__create_horizontal_line__is_console_width(void)
 {
     /** Arrange */
     CONSOLE_SCREEN_BUFFER_INFO csbi = {
@@ -249,7 +249,7 @@ test__create_horizontal_line__is_console_width()
 
 
 int
-test__get_console_info__sets_attributes()
+test__get_console_info__sets_attributes(void)
 {
     /** Arrange */
     struct console_info console = { -1, -1, -1 };
@@ -272,7 +272,7 @@ test__get_console_info__sets_attributes()
 
 
 int
-test__get_console_width__greater_than_zero()
+test__get_console_width__greater_than_zero(void)
 {
     /** Arrange */
     int width = -1;
@@ -291,11 +291,11 @@ test__get_console_width__greater_than_zero()
 
 
 int
-main()
+main(void)
 {
     int failed_count = 0;
 
-    //failed_count += test__append_horizontal_line();
+/*    //failed_count += test__append_horizontal_line();*/
     failed_count += test__compact_size_with_suffix__is_bytes();
     failed_count += test__compact_size_with_suffix__is_gigabytes();
     failed_count += test__compact_size_with_suffix__is_kilobytes();
@@ -304,7 +304,7 @@ main()
     failed_count += test__compact_size_with_suffix__is_not_megabytes();
     failed_count += test__compact_size_with_suffix__is_terabytes();
     failed_count += test__compact_size_with_suffix__works_with_ntfs_volume_limit();
-    //failed_count += test__create_footer();
+/*    //failed_count += test__create_footer();*/
     failed_count += test__create_horizontal_line__is_console_width();
     failed_count += test__get_console_info__sets_attributes();
     failed_count += test__get_console_width__greater_than_zero();

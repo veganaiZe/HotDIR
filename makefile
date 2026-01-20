@@ -1,8 +1,19 @@
+################################################################
+# NOTE: Subsystem "5.01" requires MSVC <= 19.27 (VS2019 16.7.28)
+################################################################
 CC = cl.exe -nologo -J -WX -W4 -sdl -arch:IA32 -O2 -D_CRT_SECURE_NO_WARNINGS
-LINK = link.exe -nologo -subsystem:console,"5.01" -OUT:
+LL = link.exe -nologo -subsystem:console,"5.01" -OUT:
 
-#CC = gcc -std=c99 -funsigned-char -O2 -fdiagnostics-color -Wall -Wextra -pedantic-errors -Wfatal-errors -Wshadow -Wconversion -Wsign-conversion -Wno-missing-braces
-#LINK = gcc -mconsole -o
+#CFLAGS = -m32 -std=c89 -funsigned-char -O2 -fdiagnostics-color -Wall -Wextra -pedantic-errors -Wfatal-errors -Wshadow -Wconversion -Wsign-conversion -Wno-missing-braces -Wno-deprecated-declarations
+
+#CC = gcc $(CFLAGS)
+#LL = gcc -mconsole -o
+
+################################################################
+# NOTE: `nmake` is required to properly run `clang`, it seems...
+################################################################
+#CC = clang $(CFLAGS)
+#LL = lld-link --color-diagnostics=never -subsystem:console,"5.01" libcmt.lib -out:
 
 
 all : tests hd.exe
@@ -13,29 +24,19 @@ test : tests
 tests : hd-tests.exe
 
 hd-tests.exe : hd-tests.obj hd.obj
-#	@$(LINK) hd-tests.obj hd.obj 2>NUL \
-#	($(GCC) $(LDFLAGS) -o hd-tests.exe hd-tests.obj hd.obj; rm NUL)
-	@$(LINK)"hd-tests.exe" hd-tests.obj hd.obj 2>NUL
+	@$(LL)"hd-tests.exe" hd-tests.obj hd.obj
 
 hd-tests.obj : hd-tests.c hd.h
-#	@$(CL) -c hd-tests.c 2>NUL \
-#	|| ($(GCC) $(CFLAGS) -c hd-tests.c -o hd-tests.obj; rm NUL)
-	@$(CC) -c hd-tests.c -o hd-tests.obj 2>NUL
+	@$(CC) -c hd-tests.c -o hd-tests.obj
 
 hd.exe : hd.obj main.obj
-#	@$(LINK) hd.obj main.obj 2>NUL \
-#	$(GCC) $(LDFLAGS) -o hd.exe hd.obj main.obj
-	@$(LINK)"hd.exe" hd.obj main.obj 2>NUL
+	@$(LL)"hd.exe" hd.obj main.obj
 
 hd.obj : hd.c hd.h
-#	@$(CL) -c hd.c 2>NUL \
-#	|| ($(GCC) $(CFLAGS) -c hd.c -o hd.obj; rm NUL)
-	@$(CC) -c hd.c -o hd.obj 2>NUL
+	@$(CC) -c hd.c -o hd.obj
 
 main.obj : main.c hd.h
-#	@$(CL) -c main.c 2>NUL \
-#	|| ($(GCC) $(CFLAGS) -c main.c -o main.obj; rm NUL)
-	@$(CC) -c main.c -o main.obj 2>NUL
+	@$(CC) -c main.c -o main.obj
 
 clean :
 	@del hd-tests.obj hd-tests.exe hd.obj hd.exe main.obj 2>NUL \

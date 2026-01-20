@@ -60,6 +60,6 @@ struct console_info * get_console_info(struct console_info *);
 int get_console_width(void);
 int process_cmdline_args(int argc, char * argv[], char search_drive, char * search_path, char * search_string);
 int process_files(HANDLE search_handle, char * search_path);
-int restore_console();
+int restore_console(void);
 
 #endif  /** HD_H */

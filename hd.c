@@ -96,11 +96,11 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
 char *
 compact_size_with_suffix(double size_bytes, char * suffixed_size)
 {
-    if(size_bytes >= 1024LL)  /** KB */
-        if((size_bytes /= 1024LL) >= 1024LL)  /** MB */
-            if((size_bytes /= 1024LL) >= 1024LL)  /** GB */
-                if((size_bytes /= 1024LL) >= 1024LL)  /** TB */
-                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024LL));
+    if(size_bytes >= 1024)  /** KB */
+        if((size_bytes /= 1024) >= 1024)  /** MB */
+            if((size_bytes /= 1024) >= 1024)  /** GB */
+                if((size_bytes /= 1024) >= 1024)  /** TB */
+                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024));
                 else sprintf(suffixed_size, "%u GB", (unsigned) size_bytes);
             else sprintf(suffixed_size, "%u MB", (unsigned) size_bytes);
         else sprintf(suffixed_size, "%u KB", (unsigned) size_bytes);
@@ -111,7 +111,7 @@ compact_size_with_suffix(double size_bytes, char * suffixed_size)
 
 
 int
-display_footer()
+display_footer(void)
 {
     char line[8192] = { 0 };
 
@@ -183,7 +183,7 @@ int display_header(char * search_path)
 }
 
 
-int display_help()
+int display_help(void)
 {
     int i;
 
@@ -253,7 +253,7 @@ get_console_info(struct console_info * p_console)
 
 
 int
-get_console_width()
+get_console_width(void)
 {
     HANDLE console_output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO console_screen_buffer_info = { 0 };
@@ -502,7 +502,8 @@ int process_files(HANDLE search_handle, char * search_path)
             GetConsoleScreenBufferInfo(g_hConsole, &g_screen_info_t);
             g_dwAttrib = g_screen_info_t.wAttributes;
             FG_GRAY(); system("PAUSE");
-            SetConsoleTextAttribute(g_hConsole, (WORD)g_dwAttrib); // Restore Color
+            /** Restore Color */
+            SetConsoleTextAttribute(g_hConsole, (WORD)g_dwAttrib);
         }
 
         /** "DARK FG_RED" for hidden files */
@@ -512,7 +513,7 @@ int process_files(HANDLE search_handle, char * search_path)
 
         /** Display file name */
         printf("%-*s", g_console_width / 2 - 8, g_file_data_t.cFileName);
-        //printf("%s\n", g_file_ext);
+/*        //printf("%s\n", g_file_ext);*/
 
         /** Display <dir> for directories */
         if(g_file_data_t.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
@@ -538,7 +539,7 @@ int process_files(HANDLE search_handle, char * search_path)
 /*            //g_total_consumed += (float)((*lpFileSizeHigh * (MAXDWORD+1)) + GetCompressedFileSize(g_file_data_t.cFileName, lpFileSizeHigh));*/
         }
 
-        FG_AQUA(); printf("\263 \n");  // Print |
+        FG_AQUA(); printf("\263 \n");  /** Print | */
     } while( FindNextFile(search_handle, &g_file_data_t) != 0 );
     /** End do */
 
@@ -547,7 +548,7 @@ int process_files(HANDLE search_handle, char * search_path)
 }
 
 
-int restore_console()
+int restore_console(void)
 {
     SetConsoleTextAttribute(g_hConsole, g_original_attributes);
     return 0;
