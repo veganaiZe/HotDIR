@@ -8,10 +8,10 @@ int main(int argc, char * argv[])
     char search_string[MAX_PATH] = { 0 };
     HANDLE search_handle = 0;
     struct console_info console;
-    WORD original_colors;
+/*    WORD original_colors;*/
 
     get_console_info(&console);
-    original_colors = (WORD)console.colors;
+/*    original_colors = (WORD)console.colors;*/
 
     build_initial_search_string(search_path, search_string);
     process_cmdline_args(argc,
@@ -24,6 +24,7 @@ int main(int argc, char * argv[])
     process_files(search_handle, search_path);
 
     display_footer();
-    restore_console(original_colors);
+/*    restore_console(original_colors);*/
+    restore_console();
     return 0;
 }

@@ -19,8 +19,8 @@ HANDLE g_hConsole;
 SHORT  g_console_width;
 WORD   g_original_attributes;
 char   g_search_drive   = 'C';     /** Pre-load with C: drive */
-//char   g_search_string[MAX_PATH];
-//char   g_search_path[MAX_PATH];
+/*//char   g_search_string[MAX_PATH];
+//char   g_search_path[MAX_PATH];*/
 
 /** Console variables: */
 CONSOLE_SCREEN_BUFFER_INFO
@@ -28,7 +28,7 @@ CONSOLE_SCREEN_BUFFER_INFO
 WIN32_FIND_DATA
        g_file_data_t;
 INT    g_console_height = 24;
-//HANDLE g_search_handle;
+/*//HANDLE g_search_handle;*/
 SHORT  g_line_count = 3;  /** Preload w/ num lines in header */
 DWORD  g_dwAttrib;
 
@@ -58,17 +58,17 @@ append_horizontal_line(char string[], unsigned int console_width)
 {
     (void) string;
     (void) console_width;
-    //unsigned int i = 0;
+    /*//unsigned int i = 0;
     //SHORT console_width = csbi.srWindow.Right + 1;
-    //const char horizontal_line_character[] = { (char)196, '\0' };
-//
+    //const char horizontal_line_character[] = { (char)196, '\0' };*/
+/*//
 //    sprintf(glyph, "%c", 196);
 //
 //    for (i=0; i <= console_width; ++i) {
 //        strcat(string, glyph);
 //    }
 //
-//    strcat(string, "\n");
+//    strcat(string, "\n");*/
     return 0;
 }
 
@@ -82,11 +82,11 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
 
     /** Draw line in result string */
     for(i = 0; i < console_width; ++i) {
-        //if (i == console_width / 2) {
+/*        //if (i == console_width / 2) {
         //    strcat(string, "%c", );
         //} else {
-            strncat(result, horizontal_line_character, 2);
-        //}
+*/            strncat(result, horizontal_line_character, 2);
+/*        //}*/
     }
 
     return result;
@@ -94,17 +94,17 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
 
 
 char *
-compact_size_with_suffix(long long size_bytes, char * suffixed_size)
+compact_size_with_suffix(double size_bytes, char * suffixed_size)
 {
     if(size_bytes >= 1024LL)  /** KB */
         if((size_bytes /= 1024LL) >= 1024LL)  /** MB */
             if((size_bytes /= 1024LL) >= 1024LL)  /** GB */
                 if((size_bytes /= 1024LL) >= 1024LL)  /** TB */
-                    sprintf(suffixed_size, "%lld TB", size_bytes/1024LL);
-                else sprintf(suffixed_size, "%lld GB", size_bytes);
-            else sprintf(suffixed_size, "%lld MB", size_bytes);
-        else sprintf(suffixed_size, "%lld KB", size_bytes);
-    else sprintf(suffixed_size, "%lld B", size_bytes);
+                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024LL));
+                else sprintf(suffixed_size, "%u GB", (unsigned) size_bytes);
+            else sprintf(suffixed_size, "%u MB", (unsigned) size_bytes);
+        else sprintf(suffixed_size, "%u KB", (unsigned) size_bytes);
+    else sprintf(suffixed_size, "%u B", (unsigned) size_bytes);
 
     return suffixed_size;
 }
@@ -144,7 +144,7 @@ display_footer()
     FG_LIGHT_GREEN(); printf(" \t\t Volume label: ");
 
     g_root_path[0] = g_search_drive;
-//  GetVolumeInformation(g_root_path, g_volume_name, ARRAYSIZE(g_volume_name), &serial_number, &max_component_length, &filesystem_flags, filesystem_name, ARRAYSIZE(filesystem_name));
+/*//  GetVolumeInformation(g_root_path, g_volume_name, ARRAYSIZE(g_volume_name), &serial_number, &max_component_length, &filesystem_flags, filesystem_name, ARRAYSIZE(filesystem_name));*/
     GetVolumeInformation(g_root_path, g_volume_name, ARRAYSIZE(g_volume_name), NULL, NULL, NULL, NULL, 0);
 
     FG_LIGHT_RED(); printf("%s\n", g_volume_name);
@@ -368,12 +368,12 @@ int process_files(HANDLE search_handle, char * search_path)
         return -1;
 
     }
-//    else if (search_handle == ERROR_FILE_NOT_FOUND) {
+/*//    else if (search_handle == ERROR_FILE_NOT_FOUND) {
 //        puts("\nNo file or folder found.");
 //
 //        restore_console();
 //        return -1;
-//    }
+//    }*/
 
     do {
         /** File is directory ? */
@@ -492,8 +492,8 @@ int process_files(HANDLE search_handle, char * search_path)
                             || strcmp(g_file_ext, ".deb") == 0 || strcmp(g_file_ext, ".rpm") == 0 || strcmp(g_file_ext, ".mdf") == 0
                             || strcmp(g_file_ext, ".cue") == 0 || strcmp(g_file_ext, ".bin") == 0 || strcmp(g_file_ext, ".apk") == 0)
                     FG_YELLOW();
-                else FG_GRAY();  // (everything else)
-            } else FG_GRAY();  // (no extension)
+                else FG_GRAY();  /** (everything else) */
+            } else FG_GRAY();  /** (no extension) */
         } /** First if/else */
 
         /** Pause if console screen is full */
@@ -535,7 +535,7 @@ int process_files(HANDLE search_handle, char * search_path)
                 else printf("% 5.1f KB", g_file_size);
             else printf("% 5d B ", (int)g_file_size);
 
-            //g_total_consumed += (float)((*lpFileSizeHigh * (MAXDWORD+1)) + GetCompressedFileSize(g_file_data_t.cFileName, lpFileSizeHigh));
+/*            //g_total_consumed += (float)((*lpFileSizeHigh * (MAXDWORD+1)) + GetCompressedFileSize(g_file_data_t.cFileName, lpFileSizeHigh));*/
         }
 
         FG_AQUA(); printf("\263 \n");  // Print |

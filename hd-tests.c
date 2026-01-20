@@ -114,7 +114,7 @@ int
 test__compact_size_with_suffix__is_not_gigabytes()
 {
     /** Arrange */
-    long long size = 1073741823;
+    unsigned long size = 1073741823;
     char result[16] = { 0 };
     const char * expected = "1023 MB";
 
@@ -156,7 +156,7 @@ int
 test__compact_size_with_suffix__is_terabytes()
 {
     /** Arrange */
-    long long size = 1099511627776;
+    double size = 1099511627776;
     char result[16] = { 0 };
     const char * expected = "1 TB";
 
@@ -177,7 +177,7 @@ int
 test__compact_size_with_suffix__works_with_ntfs_volume_limit()
 {
     /** Arrange */
-    long long size = 281474976710656;
+    double size = 281474976710656;
     char result[16] = { 0 };
     const char * expected = "256 TB";
 
