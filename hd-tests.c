@@ -27,6 +27,69 @@ test__append_horizontal_line(void)
 
 
 int
+test__build_initial_search_string__search_path_ends_with_wildcard(void)
+{
+    /** Arrange */
+    char search_path[MAX_PATH] = { 0 };
+    char search_string[MAX_PATH] = { 0 };
+    char * result = NULL;
+
+    /** Act */
+    build_initial_search_string(search_path, search_string);
+    result = &search_path[strlen(search_path) - strlen("\\*.*")];
+
+    /** Assert */
+    if (strncmp(result, "\\*.*", 4) != 0) {
+        printf("\nLINE %d: SEARCH PATH SHOULD END WITH WILDCARD\n", __LINE__);
+        printf("ENDS WITH: %s\n", result);
+        return 1;
+    }
+
+    return 0;
+}
+
+
+int
+test__build_initial_search_string__search_path_not_empty(void)
+{
+    /** Arrange */
+    char search_path[MAX_PATH] = { 0 };
+    char search_string[MAX_PATH] = { 0 };
+
+    /** Act */
+    build_initial_search_string(search_path, search_string);
+
+    /** Assert */
+    if (strlen(search_path) == 0) {
+        printf("\nLINE %d: SEARCH PATH SHOULD BE POPULATED\n", __LINE__);
+        return 1;
+    }
+
+    return 0;
+}
+
+
+int
+test__build_initial_search_string__search_string_not_empty(void)
+{
+    /** Arrange */
+    char search_path[MAX_PATH] = { 0 };
+    char search_string[MAX_PATH] = { 0 };
+
+    /** Act */
+    build_initial_search_string(search_path, search_string);
+
+    /** Assert */
+    if (strlen(search_string) == 0) {
+        printf("\nLINE %d: SEARCH STRING SHOULD BE POPULATED\n", __LINE__);
+        return 1;
+    }
+
+    return 0;
+}
+
+
+int
 test__compact_size_with_suffix__is_bytes(void)
 {
     /** Arrange */
@@ -252,18 +315,25 @@ int
 test__get_console_info__sets_attributes(void)
 {
     /** Arrange */
-    struct console_info console = { -1, -1, -1 };
+    struct console_info console_info = { (void*) 0, -1, -1, -1, -1 };
 
     /** Act */
-    get_console_info(&console);
+    get_console_info(&console_info);
 
     /** Assert */
-    if (console.colors < 0 || console.width < 1 || console.height < 0) {
-        printf("RESULT: %d, %d, %d\n",
-               console.colors,
-               console.width,
-               console.height);
-        printf("LINE %d: CONSOLE ATTRIBUTES SHOULD BE SET", __LINE__);
+    if (console_info.console_handle == (void*) 0
+            || console_info.colors < 0
+            || console_info.colors_original < 0
+            || console_info.width < 1
+            || console_info.height < 0)
+    {
+        printf("RESULT: %d, %d, %d, %d, %d\n",
+               (int) console_info.console_handle,
+               console_info.colors,
+               console_info.colors_original,
+               console_info.width,
+               console_info.height);
+        printf("LINE %d: ALL CONSOLE ATTRIBUTES SHOULD BE SET", __LINE__);
         return 1;
     }
 
@@ -291,11 +361,33 @@ test__get_console_width__greater_than_zero(void)
 
 
 int
+test__process_command_line__returns_clear_screen_true(void)
+{
+    /** Arrange */
+    const char * argv[] = { "something", "/c", "anotherthing" };
+    struct search_info search_info;
+
+    /** Act */
+    process_command_line(&search_info, sizeof argv / sizeof (char*), argv);
+
+    /** Assert */
+    if (search_info.should_clear_screen == 0) {
+        printf("\nLINE %d: CLEAR SCREEN SHOULD BE TRUE\n", __LINE__);
+        return 1;
+    }
+    return 0;
+}
+
+
+int
 main(void)
 {
     int failed_count = 0;
 
 /*    //failed_count += test__append_horizontal_line();*/
+    failed_count += test__build_initial_search_string__search_path_ends_with_wildcard();
+    failed_count += test__build_initial_search_string__search_path_not_empty();
+    failed_count += test__build_initial_search_string__search_string_not_empty();
     failed_count += test__compact_size_with_suffix__is_bytes();
     failed_count += test__compact_size_with_suffix__is_gigabytes();
     failed_count += test__compact_size_with_suffix__is_kilobytes();
@@ -308,8 +400,9 @@ main(void)
     failed_count += test__create_horizontal_line__is_console_width();
     failed_count += test__get_console_info__sets_attributes();
     failed_count += test__get_console_width__greater_than_zero();
+    failed_count += test__process_command_line__returns_clear_screen_true();
 
-    printf("\n%d failing test%c\n", failed_count, failed_count != 1 ? 's' : '\0');
+    printf("\n%d failing test%c\n\n", failed_count, failed_count != 1 ? 's' : '\0');
 
     return failed_count;
 }

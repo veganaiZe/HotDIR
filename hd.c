@@ -41,7 +41,7 @@ int    g_file_counter   = 0;       /** Total listed file count */
 
 /** Args to GetVolumeInformation() */
 TCHAR  g_volume_name[MAX_PATH + 1] = { 0 };
-char * g_root_path = "x:\\";
+char g_root_path[] = "x:\\";
 
 
 int
@@ -67,9 +67,13 @@ append_horizontal_line(char string[], unsigned int console_width)
 int
 build_initial_search_string(char * search_path, char * search_string)
 {
-    GetCurrentDirectory(MAX_PATH, search_string);
-    strcpy(search_path, search_string);
-    strcat(search_path, "\\*.*");
+    DWORD result = GetCurrentDirectory(MAX_PATH, search_string);
+    if (result == 0) {
+        puts("Error getting current directory.");
+        exit(1);
+    }
+    strncpy(search_path, search_string, MAX_PATH);
+    strncat(search_path, "\\*.*", MAX_PATH);
     return 0;
 }
 
@@ -126,7 +130,7 @@ create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
 
 
 int
-display_footer(void)
+display_footer(struct console_info * console_info)
 {
     char line[8192] = { 0 };
 
@@ -168,14 +172,14 @@ display_footer(void)
 
 
 int
-display_header(char * search_path)
+display_header(struct console_info * console_info, struct search_info * search_info)
 {
     char line[8192] = { 0 };
 
     FG_BRIGHT_WHITE();
     puts("\nHD");
     FG_AQUA();
-    printf("Path: %s\n", search_path);
+    printf("Path: %s\n", search_info->path);
 
     /** Draw horizontal line across screen */
     create_horizontal_line(line, g_screen_info_t);
@@ -186,7 +190,7 @@ display_header(char * search_path)
 
 
 int
-display_help(void)
+display_help(struct console_info * console_info)
 {
     int i;
 
@@ -194,7 +198,7 @@ display_help(void)
     FG_AQUA(); puts("Public domain by veganaiZe");
 
     /** Draw ------------- */
-    for (i = 0; i < g_console_width; i++) putchar(196);
+    for (i = 0; i < console_info->width; i++) { putchar(196); }
 
     FG_PURPLE(); printf("\nClone of ");
     FG_YELLOW(); printf("HotDIR ");
@@ -237,22 +241,33 @@ fixup_path(char * search_path)
 
 
 struct console_info *
-get_console_info(struct console_info * p_console)
+get_console_info(struct console_info * p_console_info)
 {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    g_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    GetConsoleScreenBufferInfo(hConsole, &g_screen_info_t);
+    CONSOLE_SCREEN_BUFFER_INFO console_screen_buffer_info;
+    p_console_info->console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+/*    g_hConsole = GetStdHandle(STD_OUTPUT_HANDLE);*/
+    GetConsoleScreenBufferInfo(p_console_info->console_handle,
+                               &console_screen_buffer_info);
 
-    g_original_attributes = g_screen_info_t.wAttributes; /** Save console colors */
-    p_console->colors = g_screen_info_t.wAttributes;
-    g_console_width = g_screen_info_t.srWindow.Right;    /** Get console width */
-    p_console->width = g_screen_info_t.srWindow.Right + 1;
-    g_console_height = g_screen_info_t.srWindow.Bottom
-                     - g_screen_info_t.srWindow.Top;  /** Get console height */
-    p_console->height = g_screen_info_t.srWindow.Bottom
-                        - g_screen_info_t.srWindow.Top;
+    /** Save console colors */
+/*    g_original_attributes = */
+    p_console_info->colors = p_console_info->colors_original =
+            console_screen_buffer_info.wAttributes;
+/*    p_console_info->colors = g_screen_info_t.wAttributes;*/
 
-    return p_console;
+    /** Get console width */
+    g_console_width = console_screen_buffer_info.srWindow.Right;
+    p_console_info->width = console_screen_buffer_info.srWindow.Right + 1;
+
+    /** Get console height */
+/*    g_console_height = */
+    p_console_info->height =
+            console_screen_buffer_info.srWindow.Bottom
+            - console_screen_buffer_info.srWindow.Top;
+/*    p_console_info->height =
+            g_screen_info_t.srWindow.Bottom - g_screen_info_t.srWindow.Top;*/
+
+    return p_console_info;
 }
 
 
@@ -260,7 +275,7 @@ int
 get_console_width(void)
 {
     HANDLE console_output_handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO console_screen_buffer_info = { 0 };
+    CONSOLE_SCREEN_BUFFER_INFO console_screen_buffer_info;
     GetConsoleScreenBufferInfo(console_output_handle,
                                &console_screen_buffer_info);
 
@@ -268,30 +283,33 @@ get_console_width(void)
 }
 
 
+/*int
+process_command_line(
+        int    argc,
+        char * argv[],
+        char   search_drive,
+        char * search_path,
+        char * search_string)*/
 int
-process_cmdline_args(
-        int argc,
-        char *argv[],
-        char search_drive,
-        char *search_path,
-        char *search_string)
+process_command_line(struct search_info * search_info, int argc, const char * argv[])
 {
-    /** Process command line arguments */
-    while (argc-- > 1) {
+/*    (void) search_info;*/
+    (void) argc;
+    (void) argv;
+
+    while (--argc > 0) {
         if (*(argv[argc]) == '/') {
-            switch ((int)*(argv[argc]+1)) {
-
-                /** CHOICE: Display Help `/h` */
+            switch ((int) *(argv[argc]+1)) {
                 case 'h' : case 'H' : case '?':
-                    display_help();
-                    restore_console();
-                    /** Quit */
-                    return 0;
-
-                /** CHOICE: Clear Screen `/c` */
-                case 'c' : case 'C' :
-                    system("cls");
+                    strcpy(search_info->pattern, "/h");
                     break;
+                case 'c' : case 'C':
+                    search_info->should_clear_screen = CLEAR_SCREEN;
+                    break;
+            }
+        }
+    }
+#if 0  /***********************************************************************/
 
                 /** CHOICE: Sort Name `/n` */
                 case 'n' : case 'N' :
@@ -357,12 +375,16 @@ process_cmdline_args(
 
     }  /** End while */
 
+#endif  /**********************************************************************/
+
     return 0;
 }
 
 
 int
-process_files(HANDLE search_handle, char * search_path)
+process_files(struct console_info * console_info,
+              HANDLE search_handle,
+              char * search_path)
 {
     int i;
 

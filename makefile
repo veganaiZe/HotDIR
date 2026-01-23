@@ -5,13 +5,16 @@ CC = cl.exe -nologo -J -WX -W4 -sdl -arch:IA32 -O2 -D_CRT_SECURE_NO_WARNINGS
 LL = link.exe -nologo -subsystem:console,"5.01" -OUT:
 
 #CFLAGS = -m32 -std=c89 -funsigned-char -O2 -fdiagnostics-color -Wall -Wextra -pedantic-errors -Wfatal-errors -Wshadow -Wconversion -Wsign-conversion -Wno-missing-braces -Wno-deprecated-declarations
+#CXXFLAGS = -m32 -std=c++17 -funsigned-char -O2 -fdiagnostics-color -Wall -Wextra -pedantic-errors -Wfatal-errors -Wshadow -Wconversion -Wsign-conversion -Wno-missing-braces -Wno-deprecated-declarations -Wno-deprecated
 
+#CC = g++ $(CXXFLAGS)
 #CC = gcc $(CFLAGS)
 #LL = gcc -mconsole -o
 
 ################################################################
 # NOTE: `nmake` is required to properly run `clang`, it seems...
 ################################################################
+#CC = clang++ $(CXXFLAGS)
 #CC = clang $(CFLAGS)
 #LL = lld-link --color-diagnostics=never -subsystem:console,"5.01" libcmt.lib -out:
 
