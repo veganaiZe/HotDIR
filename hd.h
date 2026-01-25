@@ -65,6 +65,7 @@ struct console_info {
 
 struct search_info {
     enum sort_by sort_by;
+    char drive;
     char path[4096];
     char pattern[4096];
     enum should_clear_screen should_clear_screen;
@@ -72,19 +73,18 @@ struct search_info {
 
 
 int append_horizontal_line(char[], unsigned int);
-int build_initial_search_string(char * search_path, char * search_string);
+int build_initial_search_string(struct search_info *);
 char * compact_size_with_suffix(double, char *);
 int create_footer(char *, int, char *, char);
 char * create_horizontal_line(char *,  struct console_info *);
-int display_footer(struct console_info *);
+int display_footer(struct console_info *, struct search_info *);
 int display_header(struct console_info *, struct search_info *);
 int display_help(struct console_info *);
-int fixup_path(char * search_path);
+int fixup_path(struct search_info * search_info);
 struct console_info * get_console_info(struct console_info *);
 int get_console_width(void);
-/*int process_command_line(int argc, char * argv[], char search_drive, char * search_path, char * search_string);*/
 int process_command_line(struct search_info *, int argc, const char * argv[]);
-int process_files(struct console_info *, HANDLE search_handle, char * search_path);
-int restore_console(void);
+int process_files(struct console_info *, struct search_info * search_info);
+int restore_console(struct console_info * console_info);
 
 #endif  /** HD_H */

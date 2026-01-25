@@ -30,13 +30,14 @@ int
 test__build_initial_search_string__search_path_ends_with_wildcard(void)
 {
     /** Arrange */
-    char search_path[MAX_PATH] = { 0 };
-    char search_string[MAX_PATH] = { 0 };
+    struct search_info search_info = {
+        SORT_BY_NAME, 'C', ""/*path*/, ""/*pattern*/, DONT_CLEAR_SCREEN
+    };
     char * result = NULL;
 
     /** Act */
-    build_initial_search_string(search_path, search_string);
-    result = &search_path[strlen(search_path) - strlen("\\*.*")];
+    build_initial_search_string(&search_info);
+    result = &search_info.path[strlen(search_info.path) - strlen("\\*.*")];
 
     /** Assert */
     if (strncmp(result, "\\*.*", 4) != 0) {
@@ -53,14 +54,15 @@ int
 test__build_initial_search_string__search_path_not_empty(void)
 {
     /** Arrange */
-    char search_path[MAX_PATH] = { 0 };
-    char search_string[MAX_PATH] = { 0 };
+    struct search_info search_info = {
+        SORT_BY_NAME, 'C', ""/*path*/, ""/*pattern*/, DONT_CLEAR_SCREEN
+    };
 
     /** Act */
-    build_initial_search_string(search_path, search_string);
+    build_initial_search_string(&search_info);
 
     /** Assert */
-    if (strlen(search_path) == 0) {
+    if (strlen(search_info.path) == 0) {
         printf("\nLINE %d: SEARCH PATH SHOULD BE POPULATED\n", __LINE__);
         return 1;
     }
@@ -73,14 +75,15 @@ int
 test__build_initial_search_string__search_string_not_empty(void)
 {
     /** Arrange */
-    char search_path[MAX_PATH] = { 0 };
-    char search_string[MAX_PATH] = { 0 };
+    struct search_info search_info = {
+        SORT_BY_NAME, 'C', ""/*path*/, ""/*pattern*/, DONT_CLEAR_SCREEN
+    };
 
     /** Act */
-    build_initial_search_string(search_path, search_string);
+    build_initial_search_string(&search_info);
 
     /** Assert */
-    if (strlen(search_string) == 0) {
+    if (strlen(search_info.pattern) == 0) {
         printf("\nLINE %d: SEARCH STRING SHOULD BE POPULATED\n", __LINE__);
         return 1;
     }
