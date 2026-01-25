@@ -85,7 +85,7 @@ compact_size_with_suffix(double size_bytes, char * suffixed_size)
         if((size_bytes /= 1024) >= 1024)  /** MB */
             if((size_bytes /= 1024) >= 1024)  /** GB */
                 if((size_bytes /= 1024) >= 1024)  /** TB */
-                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024));
+                    sprintf(suffixed_size, "%lu TB", (unsigned long) (size_bytes/1024LU));
                 else sprintf(suffixed_size, "%u GB", (unsigned) size_bytes);
             else sprintf(suffixed_size, "%u MB", (unsigned) size_bytes);
         else sprintf(suffixed_size, "%u KB", (unsigned) size_bytes);
@@ -110,20 +110,16 @@ create_footer(char * footer_string, int console_width, char * root_path, char se
 
 
 char *
-create_horizontal_line(char * result, CONSOLE_SCREEN_BUFFER_INFO csbi)
+create_horizontal_line(char result[], struct console_info * console_info)
 {
-    SHORT i;
-    SHORT console_width = csbi.srWindow.Right + 1;
-    const char horizontal_line_character[] = { (char)196, '\0' };
+    int i = 0;
+    const char horizontal_line_character = (char) 196;
 
     /** Draw line in result string */
-    for(i = 0; i < console_width; ++i) {
-/*        //if (i == console_width / 2) {
-        //    strcat(string, "%c", );
-        //} else {
-*/            strncat(result, horizontal_line_character, 2);
-/*        //}*/
+    for(i = 0; i < console_info->width; ++i) {
+        result[i] = horizontal_line_character;
     }
+    result[i] = '\0';
 
     return result;
 }
@@ -135,7 +131,7 @@ display_footer(struct console_info * console_info)
     char line[8192] = { 0 };
 
     FG_AQUA();
-    create_horizontal_line(line, g_screen_info_t);
+    create_horizontal_line(line, console_info);
     printf("%s", line);
 
     FG_LIGHT_AQUA();
@@ -182,7 +178,7 @@ display_header(struct console_info * console_info, struct search_info * search_i
     printf("Path: %s\n", search_info->path);
 
     /** Draw horizontal line across screen */
-    create_horizontal_line(line, g_screen_info_t);
+    create_horizontal_line(line, console_info);
     printf("%s", line);
 
     return 0;

@@ -19,6 +19,7 @@ main(int argc, const char * argv[])
         display_help(&console_info);
         return 0;
     }
+    display_header(&console_info, &search_info);
 
 /*    char search_path[MAX_PATH] = { 0 };*/
 /*    char search_string[MAX_PATH] = { 0 };*/

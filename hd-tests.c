@@ -286,23 +286,17 @@ int
 test__create_horizontal_line__is_console_width(void)
 {
     /** Arrange */
-    CONSOLE_SCREEN_BUFFER_INFO csbi = {
-            80, 40,        /** buffer columns, rows */
-            0, 0,          /** cursor column, row */
-            14,            /** color attributes */
-            0, 0, 79, 39,  /** coords left, top, right, bottom */
-            0, 0           /** max window size */
-    };
-    size_t console_width = (size_t) csbi.srWindow.Right + 1;
+    struct console_info console_info;
     char line[8192] = { 0 };
-    size_t length = 0;
+    int length = 0;
 
     /** Act */
-    create_horizontal_line(line, csbi);
-    length = strlen(line);
+    get_console_info(&console_info);
+    create_horizontal_line(line, &console_info);
+    length = (int) strlen(line);
 
     /** Assert */
-    if (length != console_width) {
+    if (length != console_info.width) {
         printf("LINE %d: LENGTH OF LINE SHOULD MATCH CONSOLE WIDTH", __LINE__);
         return 1;
     }

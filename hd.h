@@ -65,8 +65,8 @@ struct console_info {
 
 struct search_info {
     enum sort_by sort_by;
-    char path[1024];
-    char pattern[1024];
+    char path[4096];
+    char pattern[4096];
     enum should_clear_screen should_clear_screen;
 };
 
@@ -75,7 +75,7 @@ int append_horizontal_line(char[], unsigned int);
 int build_initial_search_string(char * search_path, char * search_string);
 char * compact_size_with_suffix(double, char *);
 int create_footer(char *, int, char *, char);
-char * create_horizontal_line(char *, CONSOLE_SCREEN_BUFFER_INFO);
+char * create_horizontal_line(char *,  struct console_info *);
 int display_footer(struct console_info *);
 int display_header(struct console_info *, struct search_info *);
 int display_help(struct console_info *);
